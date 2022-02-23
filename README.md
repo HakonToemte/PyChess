@@ -5,6 +5,6 @@ Using sockets
 
 Run "pip install -r requirements.txt" for installing the required packages (just pygame)
 
-To start playing just run serverchess.py first
-then run client.py in 2 terminals that will automatically connect. Can use pycharm run-in parallel for this.
+To start playing just run serverChess.py first and let it run.
+then run client.py in 2 other terminals. Can use pycharm run-in parallel for this.
 You can have more than 2 clients playing at the same time.
