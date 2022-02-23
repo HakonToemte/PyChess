@@ -1,10 +1,5 @@
 import pygame
-import socket
 from network import Network
-import math
-import pickle
-import kivy
-import copy
 import ast
 import time
 
