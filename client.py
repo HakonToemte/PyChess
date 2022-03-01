@@ -30,8 +30,6 @@ class Timer:
         text = self.text
         text2 = self.text2
         text3 = font.render(":", 1, (177, 192, 232), False)
-       # print(game.p1Timer, "Text")
-        #text2 = self.text % 60
         win.blit(text, (self.x + round(self.width / 2) - round(text.get_width() / 2)*4,
                         self.y + round(self.height / 2) - round(text.get_height() / 2)))
         win.blit(text2, (self.x + round(self.width / 2) - round(text.get_width() / 2)*(1/4),
@@ -175,15 +173,12 @@ class Piece:
         pawnupgrade = "Nothing"
         check = 0
         kingspot = -1
-        print("dropping1")
         if (player2Went and currentplayer == 0 and self.color == white) or (player1Went and currentplayer == 1 and
                                                                             self.color == black):
-            #print(time.perf_counter()-t, "time1")
             t = time.perf_counter()
             if cell and cell.name != self.name and self.find_if_legal_move(self.name, cell.name, currentplayer, drawingpiece,0,self,cell.name):
                 legal_move = self.find_if_legal_move(self.name, cell.name, currentplayer, drawingpiece, 0, self,
                                                      cell.name)
-                #print("dropping2")
                 for piece in drawingpiece:
                     if drawingpiece[piece].piece == "King":
                         if currentplayer == 0:
@@ -235,14 +230,8 @@ class Piece:
                                         if drawingpiece[piece].find_if_legal_move(drawingpiece[piece].name, kingspot_minus1,currentplayer,drawingpiece,0, self, cell.name):
                                             check = 1
 
-                #print(kingspot, " kingspot")
-                #print(time.perf_counter()-t, "time2")
-                #if check == 0:
-                #print(check, " check")
-                #print(game.bothconnected, "BOTHCONNECT")
                 if game.bothconnected is True:
                     if check == 0:
-                        #print(self.name, " Last")
                         heim = self.name
                         move = (self.name, cell.name) + movecastle
                         self.x = cell.x + cellwidth / 4
@@ -250,11 +239,8 @@ class Piece:
                         self.name = cell.name
                         self.moved = 1
                         n.send("Moved")
-                        print(legal_move, "legal")
                         if legal_move[1] != -1:
-                            print("CAP1")
                             capture_piece(legal_move[1])
-                        #print(move , " 3")
                         # sends move
                         if legal_move[0] and legal_move[2] == 1: # legal_move = (True, piece2cap, castle, rook_to_move, rook_move_to)
                             movecastle = (legal_move[3].name, legal_move[4].name)
@@ -312,19 +298,15 @@ class Piece:
                             game.gamestarted = True
 
                     else: #go home, check is in play
-                        print("Wayou42")
                         self.x = drawingcell[name_to_cell(self.name, currentplayer)].x + cellwidth / 4
                         self.y = drawingcell[name_to_cell(self.name, currentplayer)].y + cellwidth / 4
                 else:# go home, both players havent connected
-                    print("Wayout3")
                     self.x = drawingcell[name_to_cell(self.name, currentplayer)].x + cellwidth / 4
                     self.y = drawingcell[name_to_cell(self.name, currentplayer)].y + cellwidth / 4
             else: #go home,invalid move
-                print("Wayout2")
                 self.x = drawingcell[name_to_cell(self.name, currentplayer)].x + cellwidth/4
                 self.y = drawingcell[name_to_cell(self.name, currentplayer)].y + cellwidth/4
         else:
-            print("wayout1")
             self.x = drawingcell[name_to_cell(self.name, currentplayer)].x + cellwidth / 4
             self.y = drawingcell[name_to_cell(self.name, currentplayer)].y + cellwidth / 4
         #vi har gjort trekket vårt, se etter motstanders trekk
@@ -378,15 +360,12 @@ class Piece:
                 pieceoncell = name_to_cell(r[piece].name, player)
                 if pieceoncell == newcell:
                     pieceonspot = 1
-                    print("CAP2")
                     capture_piece(piece)
             #if enemy used en passant
             if self.piece == "Pawn":
                 if self.name[0] != drawingcell[newcell].name[0] and pieceonspot == 0:
-                    print("en passant")
                     for piece in r:
                         if r[piece].name == drawingcell[newcell-8].name:
-                            print("CAP3")
                             capture_piece(piece)
             if self.name != drawingcell[newcell].name:
                 self.x = drawingcell[newcell].x + cellwidth / 4
@@ -433,7 +412,6 @@ class Piece:
             if testpiece.piece == "King":
                 target = testpiece.name
         piece2cap = -1
-        #print(target, " kingspiot")
         r = dict(drawingpiece)
         if currentplayer == 0:
             if self.piece == "Pawn": #pawn logic
@@ -1279,7 +1257,6 @@ def main():
             if event.type == pygame.MOUSEBUTTONUP:
                 if held == 1 and brikke != -1:
                     square = drawingpiece[brikke].find_square()
-                    print("DROP1")
                     drawingpiece[brikke].drop(square, game.p1Went, game.p2Went, player)
 
                 held = 0
@@ -1290,7 +1267,6 @@ def main():
                     if event.type == pygame.MOUSEBUTTONUP:
                         if held == 1 and brikke != -1:
                             square = drawingpiece[brikke].find_square()
-                            print("DROP2")
                             drawingpiece[brikke].drop(square, game.p1Went, game.p2Went, player)
                         held = 0
         move1 = game.get_player_move(0)
@@ -1342,7 +1318,6 @@ def main():
                 for piece in r:
                     if r[piece].color == white:
                         if r[piece].name == hometup:
-                            # print(hometup)
                             r[piece].update_enemy_move(homecell, targetcell, pawnupgrade_to, player)
                         if r[piece].name == castle_move_from_tup:
                             r[piece].update_enemy_move(castle_move_from_cell, castle_move_to_cell, pawnupgrade_to, player)
@@ -1363,7 +1338,6 @@ def readycheck(first):
         pygame.display.update()
         try:
             if first is False:
-                print("FIRST")
                 create_new_game()
                 first = True
         except:
@@ -1380,8 +1354,6 @@ def readycheck(first):
     main()
 
 def win_screen(winner):
-    print("WIN SCREEN")
-    print(winner)
     t = time.perf_counter()
     while True:
         font = pygame.font.SysFont("comicsansms", 60)

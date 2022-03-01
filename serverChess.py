@@ -11,7 +11,7 @@ s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 try:
     s.bind((server, port))
 except socket.error as e:
-    print(str(e), "hva skjer")
+    print(str(e))
 s.listen(2)
 print("Waiting for a connection, Server Started")
 
@@ -28,17 +28,13 @@ def threaded_client(conn, p, gameId):
     timesinceconnected = 0
     t = time.perf_counter()
     t1 = 0
-    #print( "rett for")
     while True:
         try:
-            #print("for data")
-            #print(conn, "connect")
+
             data = conn.recv(4096).decode()
-            #print("etter data")
             if gameId in games:
                 game = games[gameId]
                 print(len(games), "games")
-                #print(game, "seding game")
                 if game.bothconnected is True and counter == 0:
                     t1 = time.perf_counter()
                 if game.bothconnected is True:
@@ -60,19 +56,14 @@ def threaded_client(conn, p, gameId):
                         if game.p1Timer < 0:
                             game.win(1) #1 is player 2, clientside
 
-                        #print(game.p1Timer, "P1 timer")
-                        #print(game.p2Timer, "P2 timer")
                 if not data:
-                    print("break")
+                    print("no data")
                     break
                 else:
                     if data == "reset":
                         game.resetWent()
                     elif data == "Start":
                         game.playerconnect(p)
-                    #elif data == "Nytt game":
-                        #games = {}
-                        #idCount = 0
                     elif data != "get":
                         if p == 0:
                             game.p1Timer += (game.timer_increment/2)
