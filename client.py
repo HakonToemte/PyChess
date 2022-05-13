@@ -1,12 +1,13 @@
 import pygame
 from network import Network
 import ast
+from win32api import GetSystemMetrics
 import time
 
 pygame.font.init()
 
-width = 1000
-height =1000
+width = round(GetSystemMetrics(0) / 3)
+height =round(GetSystemMetrics(0) / 3)
 
 win = pygame.display.set_mode((width, height))
 pygame.display.set_caption("Client")
@@ -1094,53 +1095,34 @@ def redrawWindow(win, game, p, pawn_menu):
         win.blit(text, (width/2 - text.get_width()/2, height/2 - text.get_height()/2))
     else:
         font = pygame.font.SysFont("comicsansms", 60)
-        text = font.render("You are player " + str(p+1), 1, (0, 255, 255))
-        win.blit(text, (80, 20))
-        text = font.render("Opponents", 1, (0, 255, 255))
-        win.blit(text, (380, 200))
         if game.bothWent():
             pass
         else:
             pass
 
+        farge = 1
+        text2part1Convers= game.p2Timer // 60
+        text2part2Convers= game.p2Timer % 60
+        text1part1Convers= game.p1Timer // 60
+        text1part2Convers= game.p1Timer % 60
+        text2part1 = font.render(str(text2part1Convers)[0:1], 1, (177, 192, 232), False)
+        if text2part2Convers < 10:
+            text2part2 = font.render("0"+str(text2part2Convers)[0:1], 1, (177, 192, 232), False)
+        else:
+            text2part2 = font.render(str(text2part2Convers)[0:2], 1, (177, 192, 232), False)
+        text1part1 = font.render(str(text1part1Convers)[0:1], 1, (177, 192, 232), False)
+        if text1part2Convers < 10:
+            text1part2 = font.render("0"+str(text1part2Convers)[0:1], 1, (177, 192, 232), False)
+        else:
+            text1part2 = font.render(str(text1part2Convers)[0:2], 1, (177, 192, 232), False)
         if p == 1:
-            farge = 1
-            text2part1Convers= game.p2Timer // 60
-            text2part2Convers= game.p2Timer % 60
-            text1part1Convers= game.p1Timer // 60
-            text1part2Convers= game.p1Timer % 60
-            text2part1 = font.render(str(text2part1Convers)[0:1], 1, (177, 192, 232), False)
-            if text2part2Convers < 10:
-                text2part2 = font.render("0"+str(text2part2Convers)[0:1], 1, (177, 192, 232), False)
-            else:
-                text2part2 = font.render(str(text2part2Convers)[0:2], 1, (177, 192, 232), False)
-            text1part1 = font.render(str(text1part1Convers)[0:1], 1, (177, 192, 232), False)
-            if text1part2Convers < 10:
-                text1part2 = font.render("0"+str(text1part2Convers)[0:1], 1, (177, 192, 232), False)
-            else:
-                text1part2 = font.render(str(text1part2Convers)[0:2], 1, (177, 192, 232), False)
-            timebox1 = Timer(text2part1, text2part2, 6*cellwidth, 9*cellheight, brown_desaturated, cellwidth*2, cellheight/2, white)
-            timebox2 = Timer(text1part1, text1part2, 6*cellwidth, 0.5*cellheight, brown_desaturated, cellwidth*2, cellheight/2, white)
+            timebox1 = Timer(text2part1, text2part2, 6*cellwidth, 9.2*cellheight, brown_desaturated, cellwidth*2, cellheight/2, white)
+            timebox2 = Timer(text1part1, text1part2, 6*cellwidth, 0.2*cellheight, brown_desaturated, cellwidth*2, cellheight/2, white)
             timebox1.draw(win)
             timebox2.draw(win)
         else:
-            farge = 1
-            text1part1Convers= game.p1Timer // 60
-            text1part2Convers= game.p1Timer % 60
-            text2part1Convers= game.p2Timer // 60
-            text2part2Convers= game.p2Timer % 60
-            text1part1 = font.render(str(text1part1Convers)[0:1],1, (232, 190, 177), False)
-            if text2part2Convers < 10:
-                text2part2 = font.render("0" + str(text2part2Convers)[0:1], 1, (177, 192, 232), False)
-            else:
-                text2part2 = font.render(str(text2part2Convers)[0:2], 1, (177, 192, 232), False)
-            text2part1 = font.render(str(text2part1Convers)[0:1],1, (255, 0, 0), False)
-            if text1part2Convers < 10:
-                text1part2 = font.render("0" + str(text1part2Convers)[0:1], 1, (177, 192, 232), False)
-            else:
-                text1part2 = font.render(str(text1part2Convers)[0:2], 1, (177, 192, 232), False)
-            timebox1 = Timer(text2part1, text2part2, 6*cellwidth, 0.5*cellheight, brownish, cellwidth*2, cellheight/2, white)
-            timebox2 = Timer(text1part1, text1part2, 6*cellwidth, 9*cellheight, brownish, cellwidth*2, cellheight/2, white)
+            timebox1 = Timer(text2part1, text2part2, 6*cellwidth, 0.2*cellheight, brownish, cellwidth*2, cellheight/2, white)
+            timebox2 = Timer(text1part1, text1part2, 6*cellwidth, 9.2*cellheight, brownish, cellwidth*2, cellheight/2, white)
             timebox1.draw(win)
             timebox2.draw(win)
         for cell in drawingcell:
@@ -1197,18 +1179,18 @@ WQueen.convert()
 WKing.convert()
 BKing.convert()
 #Background = aspect_scale(Background, width, height)
-WBishop = aspect_scale(WBishop, 76, 76)
-BBishop = aspect_scale(BBishop, 80, 80)
-BRook = aspect_scale(BRook, 80, 80)
-WRook = aspect_scale(WRook, 80, 80)
-BKing = aspect_scale(BKing, 80, 80)
-WKing = aspect_scale(WKing, 80, 80)
-BQueen = aspect_scale(BQueen, 80, 80)
-WQueen = aspect_scale(WQueen, 80, 80)
-BPawn = aspect_scale(BPawn, 80, 80)
-WPawn = aspect_scale(WPawn, 80, 80)
-WKnight = aspect_scale(WKnight, 80, 80)
-BKnight = aspect_scale(BKnight, 80, 80) 
+WBishop = aspect_scale(WBishop, width/12.5, width/12.5)
+BBishop = aspect_scale(BBishop, width/12.5, width/12.5)
+BRook = aspect_scale(BRook, width/12.5, width/12.5)
+WRook = aspect_scale(WRook, width/12.5, width/12.5)
+BKing = aspect_scale(BKing, width/12.5, width/12.5)
+WKing = aspect_scale(WKing, width/12.5,width/12.5)
+BQueen = aspect_scale(BQueen, width/12.5, width/12.5)
+WQueen = aspect_scale(WQueen, width/12.5, width/12.5)
+BPawn = aspect_scale(BPawn, width/12.5, width/12.5)
+WPawn = aspect_scale(WPawn, width/12.5, width/12.5)
+WKnight = aspect_scale(WKnight, width/12.5, width/12.5)
+BKnight = aspect_scale(BKnight, width/12.5, width/12.5)
 ##########################
 first = True
 cellwidth = height / 10  # 11 er et "tilfeldig" tall som bestemmer hvor stort rutenettet skal være på skjermen
